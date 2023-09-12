@@ -21,7 +21,14 @@
 
 		<script src="../dist/barrage.js"></script>
 		<script>
-			var barrage = new Barrage();
+			var barrage = new Barrage({
+				container: document.getElementById("outer-container"),
+				data: [],
+				trackConfig: {
+					number: 3,
+					height: 30,
+				},
+			});
 		</script>
 	</body>
 </html>
