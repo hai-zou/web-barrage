@@ -1,3 +1,4 @@
+import { Bullet } from "./bullet";
 import { BarrageItem, TrackOptions } from "./interface";
 
 export class Track {
@@ -6,11 +7,13 @@ export class Track {
 	private height: number;
 	private top: number;
 	public $trackEle: HTMLElement;
+	private bulletList: Bullet[];
 
 	constructor(options: TrackOptions) {
 		this.data = options.data;
 		this.height = options.height;
 		this.top = options.top;
+		this.bulletList = [];
 
 		this.$trackEle = this.createTrack();
 	}
@@ -25,22 +28,11 @@ export class Track {
 		return trackItem;
 	}
 
-	private createBarrage(item: BarrageItem): HTMLElement {
-		const barrageItem = document.createElement("span");
-		barrageItem.style.position = 'absolute';
-		barrageItem.style.left = '100%';
-		barrageItem.style.color = item.color;
-		barrageItem.style.whiteSpace = 'nowrap';
-		barrageItem.attributes['barrage-id'] = item.key;
-		barrageItem.innerText = item.text;
-
-		return barrageItem;
-	}
-
-	addBarrageData(item: BarrageItem): void {
+	public addBullet(item: BarrageItem): void {
 		this.data.push(item);
 	}
 
+	// 判断轨道是否有剩余空间
 	public hasPosition(): boolean {
 		if (!this.$trackEle.hasChildNodes()) {
 			return true;
@@ -58,32 +50,40 @@ export class Track {
 		}
 	}
 
-	public play(): void {
+	// 往轨道放入弹幕
+	public putInTrack(): void {
 		if (!this.data.length) return;
 		const item = this.data.shift();
-		const barrageItem = this.createBarrage(item);
-		this.$trackEle.appendChild(barrageItem);
-		this.move(barrageItem, item.speed);
+		const bulletItem = new Bullet({
+			...item,
+			left: this.$trackEle.offsetWidth,
+			removeBullet: this.destroyBullet,
+		});
+		this.bulletList.push(bulletItem);
+		this.$trackEle.appendChild(bulletItem.$bulletEle);
+		bulletItem.move();
 	}
 
-	private move(element: HTMLElement, speed: number) {
-		let left = this.$trackEle.offsetWidth;
+	// 暂停轨道上的弹幕
+	public stopAllMove(): void {
+		this.bulletList.forEach(item => {
+			item.stop();
+		});
+	}
 
-		const animate = () => {
-			left -= speed;
-			element.style.left = left + 'px';
+	// 继续移动
+	public continueMove(): void {
+		this.bulletList.forEach(item => {
+			item.move();
+		});
+	}
 
-			// 如果元素移出屏幕左侧，停止动画
-			if (left < -element.offsetWidth) {
-				this.$trackEle.removeChild(element);
-				return;
-			}
-
-			// 继续下一帧动画
-			requestAnimationFrame(animate);
+	// 销毁弹幕元素
+	private destroyBullet = (bulletItem: Bullet): void => {
+		const findIndex = this.bulletList.findIndex(item => item.key === bulletItem.key);
+		if (findIndex !== -1) {
+			this.bulletList.splice(findIndex, 1);
 		}
-
-		// 启动动画
-		animate();
+		this.$trackEle.removeChild(bulletItem.$bulletEle);
 	}
 }

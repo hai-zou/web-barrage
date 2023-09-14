@@ -10,7 +10,7 @@ export interface BarrageItem {
 	speed: number; // 速度 — 像素/秒
 	text: string; // 文字
 	color: string; // 颜色
-	createdAt: Date; // 创建时间
+	createdAt: string; // 创建时间
 }
 
 export interface BarrageConfig {
