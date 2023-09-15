@@ -1,22 +1,24 @@
 import './barrage.css';
-import { BarrageOptions, BarrageItem, TrackConfig, BarrageConfig } from './interface';
+import { BarrageOptions, BarrageItem, TrackConfig } from './interface';
 import { Track } from './track';
 import { createRandomNum } from './utils';
+import { GlobalData } from './global';
 
 export class Barrage {
     private $container: HTMLElement;
     private $curtain: HTMLElement;
     private data: BarrageItem[];
-    private config: BarrageConfig;
     private trackConfig: TrackConfig;
     private trackList: Track[] = [];
     private timer = undefined;
+    private globalDataInstance: GlobalData;
 
     constructor(options: BarrageOptions) {
         this.$container = options.container;
         this.data = options.data;
-        this.config = options.config;
-        this.trackConfig = options.trackConfig;
+        this.trackConfig = options.trackConfig || {};
+        this.globalDataInstance = GlobalData.getInstance();
+        this.globalDataInstance.setConfig(options.config || {});
 
         this.createCurtain();
         this.initTrack();
@@ -27,29 +29,28 @@ export class Barrage {
         this.$container.classList.add('barrage-container');
         this.$curtain = document.createElement('div');
         this.$curtain.classList.add('barrage-curtain');
-        const { fontSize, color } = this.config || {};
-        if (fontSize) {
-            this.$curtain.style.fontSize = fontSize;
-        }
-        if (color) {
-            this.$curtain.style.color = color;
-        }
         this.$container.appendChild(this.$curtain);
     }
 
     // 初始化轨道
     private initTrack(): void {
-        const { number, height = Track.defaultHeight } = this.trackConfig;
+        const { number, height } = this.trackConfig;
         const clientHeight = this.$curtain.clientHeight;
 
-        for (let i = 0; i < number; i++) {
+        if (height) {
+            Track.height = height;
+        }
+        if (number) {
+            Track.number = number;
+        }
+
+        for (let i = 0; i < Track.number; i++) {
             const trackItem = new Track({
                 data: [],
-                top: i * height,
-                height,
+                top: i * Track.height,
                 speed: createRandomNum(),
             });
-            if ((i + 1) * height > clientHeight) {
+            if ((i + 1) * Track.height > clientHeight) {
                 return;
             }
             this.trackList.push(trackItem);
