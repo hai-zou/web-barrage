@@ -8,8 +8,7 @@
 		<link rel="stylesheet" href="../dist/barrage.css" />
 		<style>
 			html,
-			body,
-			#outer-container {
+			body {
 				height: 100%;
 				width: 100%;
 				margin: 0;
@@ -17,18 +16,21 @@
 		</style>
 	</head>
 	<body>
-		<div id="outer-container"></div>
-
 		<script src="../dist/barrage.js"></script>
 		<script>
 			var barrage = new Barrage({
-				container: document.getElementById("outer-container"),
+				container: document.body,
 				data: [],
+				config: {
+					fontSize: "20px",
+					color: "#000",
+				},
 				trackConfig: {
 					number: 3,
-					height: 30,
+					height: 40,
 				},
 			});
+			barrage.play();
 		</script>
 	</body>
 </html>

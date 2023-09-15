@@ -1,10 +1,13 @@
 import './barrage.css';
-import { BarrageOptions, BarrageItem, TrackConfig } from './interface';
+import { BarrageOptions, BarrageItem, TrackConfig, BarrageConfig } from './interface';
 import { Track } from './track';
+import { createRandomNum } from './utils';
 
 export class Barrage {
 	private $container: HTMLElement;
+	private $curtain: HTMLElement;
 	private data: BarrageItem[];
+	private config: BarrageConfig;
 	private trackConfig: TrackConfig;
 	private trackList: Track[] = [];
 	private timer = undefined;
@@ -12,29 +15,45 @@ export class Barrage {
 	constructor(options: BarrageOptions) {
 		this.$container = options.container;
 		this.data = options.data;
+		this.config = options.config;
 		this.trackConfig = options.trackConfig;
 
-		this.$container.style.position = 'relative';
-		this.$container.style.overflow = 'hidden';
+		this.createCurtain();
 		this.initTrack();
+	}
+
+	// 创建幕布
+	private createCurtain(): void {
+		this.$container.classList.add('barrage-container');
+		this.$curtain = document.createElement('div');
+		this.$curtain.classList.add('barrage-curtain');
+		const { fontSize, color } = this.config || {};
+		if (fontSize) {
+			this.$curtain.style.fontSize = fontSize;
+		}
+		if (color) {
+			this.$curtain.style.color = color;
+		}
+		this.$container.appendChild(this.$curtain);
 	}
 
 	// 初始化轨道
 	private initTrack(): void {
-		const { number, height } = this.trackConfig;
-		const clientHeight = this.$container.clientHeight;
+		const { number, height = Track.defaultHeight } = this.trackConfig;
+		const clientHeight = this.$curtain.clientHeight;
 
 		for (let i = 0; i < number; i++) {
 			const trackItem = new Track({
 				data: [],
-				height,
 				top: i * height,
+				height,
+				speed: createRandomNum(),
 			});
 			if ((i + 1) * height > clientHeight) {
 				return;
 			}
 			this.trackList.push(trackItem);
-			this.$container.appendChild(trackItem.$trackEle);
+			this.$curtain.appendChild(trackItem.$trackEle);
 		}
 	}
 
@@ -85,12 +104,10 @@ export class Barrage {
 		this.timer = undefined;
 	}
 
-	// 销毁弹幕
+	// 清空幕布
 	public destroy(): void {
 		this.stopPut();
-		this.trackList.forEach(trackItem => {
-			this.$container.removeChild(trackItem.$trackEle);
-		});
+		this.$container.removeChild(this.$curtain);
 		this.trackList = [];
 	}
 }

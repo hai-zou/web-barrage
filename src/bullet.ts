@@ -27,10 +27,9 @@ export class Bullet {
 
 	private createBullet(item: BulletOptions): HTMLElement {
 		const barrageItem = document.createElement("span");
-		barrageItem.style.position = 'absolute';
+		barrageItem.classList.add('barrage-item');
 		barrageItem.style.left = item.left + 'px';
 		barrageItem.style.color = item.color;
-		barrageItem.style.whiteSpace = 'nowrap';
 		barrageItem.attributes['barrage-id'] = item.key;
 		barrageItem.innerText = item.text;
 

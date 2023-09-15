@@ -2,17 +2,21 @@ import { Bullet } from "./bullet";
 import { BarrageItem, TrackOptions } from "./interface";
 
 export class Track {
+	static defaultHeight = 30;
+
 	// 分配至轨道中的弹幕
 	private data: BarrageItem[];
-	private height: number;
 	private top: number;
+	private height: number;
+	private speed: number;
 	public $trackEle: HTMLElement;
 	private bulletList: Bullet[];
 
 	constructor(options: TrackOptions) {
 		this.data = options.data;
-		this.height = options.height;
 		this.top = options.top;
+		this.height = options.height;
+		this.speed = options.speed;
 		this.bulletList = [];
 
 		this.$trackEle = this.createTrack();
@@ -20,11 +24,9 @@ export class Track {
 
 	private createTrack(): HTMLElement {
 		const trackItem = document.createElement('div');
-		trackItem.style.position = 'absolute';
-		trackItem.style.left = '0';
+		trackItem.classList.add('barrage-track');
 		trackItem.style.top = this.top + 'px';
 		trackItem.style.height = this.height + 'px';
-		trackItem.style.width = '100%';
 		return trackItem;
 	}
 
@@ -43,7 +45,7 @@ export class Track {
 		const lastChildWidth = lastChild.offsetWidth;
 		const rightDistance = trackWidth - lastChildLeft - lastChildWidth;
 
-		if (rightDistance > 0) {
+		if (rightDistance > 100) {
 			return true;
 		} else {
 			return false;
@@ -57,6 +59,7 @@ export class Track {
 		const bulletItem = new Bullet({
 			...item,
 			left: this.$trackEle.offsetWidth,
+			speed: this.speed,
 			removeBullet: this.destroyBullet,
 		});
 		this.bulletList.push(bulletItem);
