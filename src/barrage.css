@@ -1,25 +1,25 @@
 .barrage-container {
-	position: relative;
+    position: relative;
 }
 
 .barrage-curtain {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
-	overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden;
 }
 
 .barrage-track {
-	position: absolute;
-	width: 100%;
-	left: 0;
+    position: absolute;
+    width: 100%;
+    left: 0;
 }
 
 .barrage-track .barrage-item {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	white-space: nowrap;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
 }
