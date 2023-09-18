@@ -25,7 +25,6 @@ module.exports = {
             }, {
                 test: /\.css$/,
                 use: [
-                    // 开发环境下使用 style-loader
                     MiniCssExtractPlugin.loader,
                     'css-loader'
                 ]
