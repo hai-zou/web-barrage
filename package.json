@@ -1,33 +1,24 @@
 {
-  "name": "h-barrage",
-  "version": "1.0.0",
-  "description": "barrage",
-  "main": "dist/barrage.umd.js",
-  "style": "dist/barrage.css",
-  "types": "dist/types/barrage.d.ts",
-  "scripts": {
-    "build": "rm -rf dist && webpack",
-    "dev": "webpack --watch",
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hai-zou/barrage.git"
-  },
-  "author": "haizou",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hai-zou/barrage/issues"
-  },
-  "homepage": "https://github.com/hai-zou/barrage#readme",
-  "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.8.1",
-    "mini-css-extract-plugin": "^2.7.6",
-    "style-loader": "^3.3.3",
-    "ts-loader": "^9.4.4",
-    "typescript": "^5.2.2",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
-  }
+    "name": "h-barrage",
+    "version": "1.0.0",
+    "description": "barrage",
+    "author": "haizou",
+    "license": "MIT",
+    "main": "dist/barrage.umd.js",
+    "style": "dist/barrage.css",
+    "types": "dist/types/barrage.d.ts",
+    "scripts": {
+        "build": "rm -rf dist && webpack",
+        "dev": "webpack --watch"
+    },
+    "devDependencies": {
+        "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^6.8.1",
+        "mini-css-extract-plugin": "^2.7.6",
+        "style-loader": "^3.3.3",
+        "ts-loader": "^9.4.4",
+        "typescript": "^5.2.2",
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.1.4"
+    }
 }
