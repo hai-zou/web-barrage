@@ -1,13 +1,13 @@
-import { GlobalData } from "./global";
-import { BarrageItem } from "./interface";
+import { BarrageConfig, BarrageItem } from "./interface";
 import { cancelAnimationFrame, getRandomColor, requestAnimationFrame } from "./utils";
 
-type BulletOptions = BarrageItem & { left: number; removeBullet: (bulletItem: Bullet) => void };
+type BulletOptions = BarrageItem & {
+    left: number;
+    removeBullet: (bulletItem: Bullet) => void;
+    config: BarrageConfig;
+};
 
 export class Bullet {
-
-    static defaultColor = '#000';
-    static fontSize = '20px';
 
     public $bulletEle: HTMLElement;
 
@@ -21,10 +21,10 @@ export class Bullet {
     // 销毁实例
     removeBullet: (bulletItem: Bullet) => void;
 
-    private globalDataInstance: GlobalData;
+    config: BarrageConfig;
 
     constructor(options: BulletOptions) {
-        this.globalDataInstance = GlobalData.getInstance();
+        this.config = options.config;
         this.key = options.key;
         this.left = options.left;
         this.speed = options.speed;
@@ -37,7 +37,7 @@ export class Bullet {
         barrageItem.classList.add('barrage-item');
         barrageItem.style.left = item.left + 'px';
         barrageItem.style.color = this.getBarrageColor(item.color);
-        barrageItem.style.fontSize = Bullet.fontSize;
+        barrageItem.style.fontSize = item.fontSize || this.config.fontSize;
         barrageItem.attributes['barrage-id'] = item.key;
         barrageItem.innerText = item.text;
 
@@ -45,11 +45,11 @@ export class Bullet {
     }
 
     private getBarrageColor(color: string): string {
-        const { useRandomColor } = this.globalDataInstance.getConfig();
+        const { useRandomColor, defaultColor } = this.config;
         if (useRandomColor) {
             return getRandomColor();
         }
-        return color || Bullet.defaultColor;
+        return color || defaultColor;
     }
 
     private animate = () => {

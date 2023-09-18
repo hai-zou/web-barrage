@@ -1,22 +1,31 @@
 import { Bullet } from "./bullet";
-import { BarrageItem, TrackOptions } from "./interface";
+import { BarrageConfig, BarrageItem, TrackOptions } from "./interface";
+
+type Options = TrackOptions & { config: BarrageConfig };
 
 export class Track {
-    static number = 3;
-    static height = 40;
+
+    public $trackEle: HTMLElement;
 
     // 分配至轨道中的弹幕
     private data: BarrageItem[];
+    // 轨道距离顶部偏移量
     private top: number;
     // 若弹幕自身没有设置速度，则使用轨道的速度
     private speed: number;
-    public $trackEle: HTMLElement;
+    // 轨道高度
+    private height: number;
+    private config: BarrageConfig;
+
+    // 轨道中运行的弹幕列表
     private bulletList: Bullet[];
 
-    constructor(options: TrackOptions) {
+    constructor(options: Options) {
         this.data = options.data;
         this.top = options.top;
         this.speed = options.speed;
+        this.height = options.config.trackHeight;
+        this.config = options.config;
         this.bulletList = [];
 
         this.$trackEle = this.createTrack();
@@ -26,7 +35,7 @@ export class Track {
         const trackItem = document.createElement('div');
         trackItem.classList.add('barrage-track');
         trackItem.style.top = this.top + 'px';
-        trackItem.style.height = Track.height + 'px';
+        trackItem.style.height = this.height + 'px';
         return trackItem;
     }
 
@@ -61,6 +70,7 @@ export class Track {
             left: this.$trackEle.offsetWidth,
             speed: item.speed || this.speed,
             removeBullet: this.destroyBullet,
+            config: this.config,
         });
         this.bulletList.push(bulletItem);
         this.$trackEle.appendChild(bulletItem.$bulletEle);

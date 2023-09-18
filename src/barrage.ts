@@ -1,58 +1,56 @@
 import './barrage.css';
-import { BarrageOptions, BarrageItem, TrackConfig, Listeners } from './interface';
+import { BarrageOptions, BarrageItem, Listeners, BarrageConfig } from './interface';
 import { Track } from './track';
 import { createRandomNum } from './utils';
-import { GlobalData } from './global';
 
 export class Barrage {
+
+    static defaultConfig: BarrageConfig = {
+        fontSize: '20px',
+        defaultColor: '#000',
+        useRandomColor: false,
+        trackNumber: 3,
+        trackHeight: 40,
+    };
+
     private $container: HTMLElement;
     private $curtain: HTMLElement;
     private data: BarrageItem[];
-    private trackConfig: TrackConfig;
+    private config: BarrageConfig;
     private trackList: Track[] = [];
     private timer = undefined;
-    private globalDataInstance: GlobalData;
     private _listeners: Listeners;
 
     constructor(options: BarrageOptions) {
         this.$container = options.container;
         this.data = options.data;
-        this.trackConfig = options.trackConfig || {};
-        this.globalDataInstance = GlobalData.getInstance();
-        this.globalDataInstance.setConfig(options.config || {});
+        this.config = {
+            ...Barrage.defaultConfig,
+            ...options.config,
+        };
         this._listeners = {};
 
-        this.createCurtain();
-        this.initTrack();
+        this._render();
     }
 
-    // 创建幕布
-    private createCurtain(): void {
+    private _render(): void {
+        // 创建幕布
         this.$container.classList.add('barrage-container');
         this.$curtain = document.createElement('div');
         this.$curtain.classList.add('barrage-curtain');
         this.$container.appendChild(this.$curtain);
-    }
 
-    // 初始化轨道
-    private initTrack(): void {
-        const { number, height } = this.trackConfig;
+        // 创建轨道
+        const { trackNumber, trackHeight } = this.config;
         const clientHeight = this.$curtain.clientHeight;
-
-        if (height) {
-            Track.height = height;
-        }
-        if (number) {
-            Track.number = number;
-        }
-
-        for (let i = 0; i < Track.number; i++) {
+        for (let i = 0; i < trackNumber; i++) {
             const trackItem = new Track({
+                config: this.config,
                 data: [],
-                top: i * Track.height,
+                top: i * trackHeight,
                 speed: createRandomNum(),
             });
-            if ((i + 1) * Track.height > clientHeight) {
+            if ((i + 1) * trackHeight > clientHeight) {
                 return;
             }
             this.trackList.push(trackItem);
@@ -87,7 +85,7 @@ export class Barrage {
     // 开始播放弹幕
     public play(): void {
         if (!this.timer) {
-            this.timer = window.setInterval(this.distributeBarrage, 500);
+            this.timer = window.setInterval(this.distributeBarrage, 1000);
         }
     }
 
@@ -141,7 +139,6 @@ export class Barrage {
         return this;
     }
 
-    // 清空幕布
     public destroy(): void {
         this.stopPut();
         this.$container.removeChild(this.$curtain);
