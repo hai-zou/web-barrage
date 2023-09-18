@@ -26,6 +26,12 @@
                 },
             });
             barrage.play();
+
+            barrage.on("dataChange", (res) => {
+                if (res.data.length < 4) {
+                    console.log(res);
+                }
+            });
         </script>
     </body>
 </html>

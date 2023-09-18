@@ -29,3 +29,7 @@ export interface TrackOptions {
     top: number; // 轨道位置
     speed: number; // 轨道中弹幕的速度
 }
+
+export interface Listeners {
+    [key: string]: Function[];
+}

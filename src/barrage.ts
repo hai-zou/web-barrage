@@ -1,5 +1,5 @@
 import './barrage.css';
-import { BarrageOptions, BarrageItem, TrackConfig } from './interface';
+import { BarrageOptions, BarrageItem, TrackConfig, Listeners } from './interface';
 import { Track } from './track';
 import { createRandomNum } from './utils';
 import { GlobalData } from './global';
@@ -12,6 +12,7 @@ export class Barrage {
     private trackList: Track[] = [];
     private timer = undefined;
     private globalDataInstance: GlobalData;
+    private _listeners: Listeners;
 
     constructor(options: BarrageOptions) {
         this.$container = options.container;
@@ -19,6 +20,7 @@ export class Barrage {
         this.trackConfig = options.trackConfig || {};
         this.globalDataInstance = GlobalData.getInstance();
         this.globalDataInstance.setConfig(options.config || {});
+        this._listeners = {};
 
         this.createCurtain();
         this.initTrack();
@@ -58,8 +60,13 @@ export class Barrage {
         }
     }
 
-    public addData(item: BarrageItem): void {
-        this.data.push(item);
+    public addData(item: BarrageItem | BarrageItem[]): void {
+        if (Array.isArray(item)) {
+            this.data.push(...item);
+        } else {
+            this.data.push(item);
+        }
+        this.emit('dataChange', { data: this.data });
     }
 
     // 分配弹幕至不同轨道
@@ -70,6 +77,7 @@ export class Barrage {
             if (barrageData) {
                 trackItem.addBullet(barrageData);
                 trackItem.putInTrack();
+                this.emit('dataChange', { data: this.data });
             } else {
                 return;
             }
@@ -105,10 +113,40 @@ export class Barrage {
         this.timer = undefined;
     }
 
+    public on(eventName: string, callback: Function): Barrage {
+        if (!this._listeners[eventName]) {
+            this._listeners[eventName] = [];
+        }
+        this._listeners[eventName].push(callback);
+        return this;
+    }
+
+    public off(eventName: string, callback: Function): Barrage {
+        if (this._listeners[eventName]) {
+            let index = this._listeners[eventName].indexOf(callback);
+            if (index > -1) {
+                this._listeners[eventName].splice(index, 1);
+            }
+        }
+        return this;
+    }
+
+    private emit(eventName: string, event: any = {}): Barrage {
+        if (this._listeners[eventName]) {
+            for (let callback of this._listeners[eventName]) {
+                let extendArgs = { ...event, ...{ name: eventName } };
+                callback.call(this, extendArgs);
+            }
+        }
+        return this;
+    }
+
     // 清空幕布
     public destroy(): void {
         this.stopPut();
         this.$container.removeChild(this.$curtain);
         this.trackList = [];
+
+        this.emit('destroy');
     }
 }
