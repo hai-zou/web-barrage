@@ -25,17 +25,21 @@ Web 端用户界面弹幕组件
 <div class="outer-container"></div>
 ```
 
-3. 引入弹幕样式，准备数据（这里使用组件提供的示例数据）
-
-```javascript
-import "h-barrage/dist/barrage.css";
-import example from "h-barrage/data.json";
+```css
+.outer-container {
+  width: 100%;
+  height: 100%;
+}
 ```
 
-4. 创建 barrage
+3. 引入弹幕样式，准备数据（这里使用组件提供的示例数据），创建 barrage
 
 ```javascript
-const barrage = new StaryBarrage({
+import { Barrage } from "stary-barrage";
+import "h-barrage/dist/barrage.css";
+import example from "h-barrage/data.json";
+
+const barrage = new Barrage({
   container: document.querySelector(".outer-container"),
   data: example,
 });
