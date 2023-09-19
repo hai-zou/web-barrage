@@ -7,6 +7,10 @@
     "main": "dist/barrage.umd.js",
     "style": "dist/barrage.css",
     "types": "dist/types/barrage.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hai-zou/barrage.git"
+    },
     "scripts": {
         "build": "rm -rf dist && webpack",
         "dev": "webpack --watch"
