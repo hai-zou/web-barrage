@@ -35,7 +35,7 @@ Web 端用户界面弹幕组件
 3. 引入弹幕样式，准备数据（这里使用组件提供的示例数据），创建 barrage
 
 ```javascript
-import { Barrage } from "stary-barrage";
+import { Barrage } from "h-barrage";
 import "h-barrage/dist/barrage.css";
 import example from "h-barrage/data.json";
 
