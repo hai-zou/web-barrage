@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/barrage.ts',
@@ -38,6 +39,11 @@ module.exports = {
             patterns: [
                 { from: './data.json', to: 'data.json' }
             ]
-        })
+        }),
+        new HtmlWebpackPlugin({
+            template: 'index.html',
+            inject: 'body',
+            scriptLoading: 'blocking'
+        }),
     ],
 }
