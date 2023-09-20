@@ -13,7 +13,8 @@
     },
     "scripts": {
         "build": "rm -rf dist && webpack",
-        "dev": "webpack --watch"
+        "dev": "webpack --watch",
+        "deploy": "bash scripts/deploy.sh"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^11.0.0",
