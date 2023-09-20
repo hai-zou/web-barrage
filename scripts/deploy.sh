@@ -9,14 +9,11 @@ npm run build
 # 进入待发布的目录
 cd dist
 
-git init
-git add -A
+git init -b main
+git checkout --orphan gh-pages
+git add .
 git commit -m 'ci: deploy'
-
-# 如果部署到 https://<USERNAME>.github.io
-# git push -f git@github.com:hai-zou/hai-zou.github.io.git master
-
-# 如果是部署到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:hai-zou/barrage.git main:gh-pages
+git remote add origin git@github.com:hai-zou/barrage.git
+git push -f origin gh-pages
 
 cd -
