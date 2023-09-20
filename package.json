@@ -4,7 +4,7 @@
     "description": "barrage",
     "author": "haizou",
     "license": "MIT",
-    "main": "dist/barrage.umd.js",
+    "main": "dist/barrage.js",
     "style": "dist/barrage.css",
     "types": "dist/types/barrage.d.ts",
     "repository": {
