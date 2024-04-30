@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Barrage Demo</title>
-    </head>
-    <style>
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-        }
-    </style>
-    <body></body>
-    <script>
-        var barrage = new Barrage({
-            container: document.body,
-            data: [],
-            config: {
-                useRandomColor: true,
-            },
-        });
-        barrage.play();
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barrage Demo</title>
+  </head>
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+    }
+  </style>
+  <body></body>
+  <script>
+    var barrage = new Barrage({
+      container: document.body,
+      data: [],
+      config: {
+        useRandomColor: true,
+      },
+    });
+    barrage.play();
 
-        // 由于浏览器的同源策略，浏览器通常不允许通过 file:// 协议访问本地文件系统并从本地文件中加载外部资源（如 JSON 文件）
-        // 所以需要通过本地启动一个服务器访问，这里推荐使用 anywhere，`npm i anywhere -g`
-        fetch("./data.json")
-            .then((response) => response.json())
-            .then((data) => {
-                barrage.addData(data);
-            })
-            .catch((error) => {
-                console.error("Error reading JSON file:", error);
-            });
-    </script>
+    // 由于浏览器的同源策略，浏览器通常不允许通过 file:// 协议访问本地文件系统并从本地文件中加载外部资源（如 JSON 文件）
+    // 所以需要通过本地启动一个服务器访问，这里推荐使用 anywhere，`npm i anywhere -g`
+    fetch("./data.json")
+      .then((response) => response.json())
+      .then((data) => {
+        barrage.addData(data);
+      })
+      .catch((error) => {
+        console.error("Error reading JSON file:", error);
+      });
+  </script>
 </html>
